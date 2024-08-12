@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/authentification.css}">
+</head>
+<body>
+    <div class="authentification">
+        <div class="bienvenu-sur-lespace-des-rclamations-du-portnet-nous-somme-lpour-vous-aider-rsoudre-vos-problmes-rappidement-et-efficacement">
+            Bienvenu sur l’espace des réclamations du PORTNET , nous somme là pour vous aider à résoudre vos problèmes rapidement et efficacement
+        </div>
+        <div class="image-1"></div>
+        <div class="container">
+            <div class="container-1">
+                <div class="nom-dutilisateure">Nom d’utilisateure</div>
+                <div class="rectangle-2">
+                    <input type="text" name="username" required>
+                </div>
+                <div class="mot-de-passe">Mot de passe</div>
+                <div class="rectangle-3">
+                    <input type="password" name="password" required>
+                </div>
+                <div class="container-2">
+                    <div class="rectangle-4">
+                        <input type="checkbox" name="remember-me">
+                    </div>
+                    <div class="se-souvenir-de-moi">Se souvenir de moi</div>
+                </div>
+                <span class="jai-oubli-mon-mot-de-passe">J’ai oublié mon mot de passe</span>
+            </div>
+            <div class="button">
+                <button type="submit" class="label-text">Login</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
