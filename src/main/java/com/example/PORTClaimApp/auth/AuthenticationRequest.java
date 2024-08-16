@@ -1,5 +1,6 @@
 package com.example.PORTClaimApp.auth;
 
+import com.example.PORTClaimApp.Enums.RoleUtilisateur;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,9 @@ import lombok.NoArgsConstructor;
 public class AuthenticationRequest {
 
     private String username ;
-     String password;
+     private String password;
+
+     //private String role;
+
 
 }

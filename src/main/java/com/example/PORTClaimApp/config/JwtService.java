@@ -1,5 +1,6 @@
 package com.example.PORTClaimApp.config;
 
+import com.example.PORTClaimApp.Entity.Utilisateur;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -26,18 +27,19 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails){
-        return generateToken(new HashMap<>(),userDetails);
+    public String generateToken(Utilisateur user){
+        return generateToken(new HashMap<>(),user);
     }
 
     public String generateToken(
             Map<String,Object> extraClaims,
-            UserDetails userDetails
+            Utilisateur utilisateur
     ){
+       // System.out.println("jhgjh");
         return Jwts
                 .builder()
-                .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .claim("role",utilisateur.getRole())
+                .setSubject(utilisateur.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis()+1000*60*24))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
