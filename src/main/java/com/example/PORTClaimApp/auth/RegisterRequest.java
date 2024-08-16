@@ -1,6 +1,8 @@
 package com.example.PORTClaimApp.auth;
 
 import com.example.PORTClaimApp.Enums.RoleUtilisateur;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +17,7 @@ public class RegisterRequest {
 
     private String email;
 
+    @Enumerated(EnumType.STRING)
     private RoleUtilisateur role;
     private String password;
 

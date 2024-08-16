@@ -7,6 +7,7 @@ import com.example.PORTClaimApp.Mapper.UtilisateurMapper;
 import com.example.PORTClaimApp.Repository.UtilisateurRepo;
 import com.example.PORTClaimApp.Service.UtilisateurService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,10 +17,12 @@ import java.util.stream.Collectors;
 public class UtilisateurServiceImpl implements UtilisateurService {
     UtilisateurRepo utilisateurRepo;
 
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public UtilisateurDTO createUtilisateur(UtilisateurDTO utilisateurDTO) {
         Utilisateur utilisateur = UtilisateurMapper.mapToUtilisateur(utilisateurDTO);
-        utilisateur.setMotDePasse(utilisateur.getMotDePasse());
+        utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
         Utilisateur savedUtilisateur = utilisateurRepo.save(utilisateur);
         return UtilisateurMapper.mapToUtilisateurDto(savedUtilisateur);
     }
