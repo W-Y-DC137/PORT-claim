@@ -1,6 +1,7 @@
 package com.example.PORTClaimApp.DTO;
 
 import com.example.PORTClaimApp.Entity.Ticket;
+import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ public class TicketAttachementDTO {
     private Long idTicAttachDto;
     private String fileNameDto;
     private String fileTypeDto;
+    @Lob
     private byte[] fileDataDto;
-    private TicketDTO ticketDTO;
+    private Long ticketId;
 }

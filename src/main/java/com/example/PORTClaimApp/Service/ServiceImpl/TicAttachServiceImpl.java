@@ -1,15 +1,19 @@
 package com.example.PORTClaimApp.Service.ServiceImpl;
 
 import com.example.PORTClaimApp.DTO.TicketAttachementDTO;
+import com.example.PORTClaimApp.Entity.Ticket;
 import com.example.PORTClaimApp.Entity.TicketAttachement;
 import com.example.PORTClaimApp.Exception.RessourceNotFoundException;
 import com.example.PORTClaimApp.Mapper.TicAttachMapper;
 import com.example.PORTClaimApp.Mapper.TicketMapper;
 import com.example.PORTClaimApp.Repository.TicketAttachementRepo;
+import com.example.PORTClaimApp.Repository.TicketRepo;
 import com.example.PORTClaimApp.Service.TicAttachService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +27,9 @@ public class TicAttachServiceImpl implements TicAttachService {
     TicketMapper ticketMapper;
     @Autowired
     TicAttachMapper ticAttachMapper;
+
+    @Autowired
+    TicketRepo ticketRepo;
     @Override
     public TicketAttachementDTO createTicAttach(TicketAttachementDTO ticAttachDTO) {
         TicketAttachement ticketAttachement= ticAttachMapper.mapToTicAttach(ticAttachDTO);
@@ -56,7 +63,7 @@ public class TicAttachServiceImpl implements TicAttachService {
         ticketAttachement.setFileName(updatedTicAttachDto.getFileNameDto());
         ticketAttachement.setFileType(updatedTicAttachDto.getFileTypeDto());
         ticketAttachement.setFileData(updatedTicAttachDto.getFileDataDto());
-        ticketAttachement.setTicket(ticketMapper.mapToTicket(updatedTicAttachDto.getTicketDTO()));
+        ticketAttachement.setTicket(ticketRepo.findById(updatedTicAttachDto.getTicketId()).orElse(null));
 
         TicketAttachement updatedTicketAttachement = ticketAttachementRepo.save(ticketAttachement);
         return TicAttachMapper.mapToTicAttachDTO(updatedTicketAttachement);
@@ -70,5 +77,34 @@ public class TicAttachServiceImpl implements TicAttachService {
                 );
         ticketAttachementRepo.deleteById(ticAttachId);
 
+    }
+
+    @Override
+    public TicketAttachement saveAttachement(MultipartFile file,Long idTicket) {
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        try{
+            if(fileName.contains("..")){
+                throw  new Exception("Le nom de fichier contient une séquence de caractères invalide." +fileName);
+            }
+
+            Ticket ticket = ticketRepo.findById(idTicket).orElseThrow(()->
+                    new Exception("Ticket non trouvé avec l'ID: " + idTicket));
+
+            TicketAttachement attachement = new TicketAttachement(
+                    null, // hada raytgenera automatiquement
+                    fileName,
+                    file.getContentType(),
+                    file.getBytes(),
+                    ticket //yarbi tkhdm had l3iba
+            );
+
+            return ticketAttachementRepo.save(attachement);
+
+        }catch (Exception e) {
+            // Handle exception (e.g., log the error)
+            e.printStackTrace();
+            // You may want to throw a custom exception here
+            throw new RuntimeException("Failed to store file " + fileName, e);
+        }
     }
 }

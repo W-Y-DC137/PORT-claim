@@ -33,7 +33,8 @@ public class AuthenticationService {
                 .role(request.getRole())
                 .motDePasse(passwordEncoder.encode(request.getPassword()))
                 .build();
-        var jwtToken = jwtService.generateToken(user);
+        Utilisateur utilisateur = utilisateurRepo.save(user);
+        var jwtToken = jwtService.generateToken(utilisateur);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();

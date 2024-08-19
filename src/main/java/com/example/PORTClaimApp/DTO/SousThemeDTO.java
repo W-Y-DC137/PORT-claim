@@ -17,5 +17,5 @@ public class SousThemeDTO {
 
     private String sousThemeDto;
 
-    private ThemeDTO themeDTO;
+    private Long themeDtoId;
 }

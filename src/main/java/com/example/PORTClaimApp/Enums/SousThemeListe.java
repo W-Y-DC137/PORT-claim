@@ -16,8 +16,8 @@ public enum SousThemeListe {
     SOUS_THEME_10("Résultats du contrôle"),
 
     //theme :Escales
-    SOUS_THEME_11("Avis d'arrivée navire "),
-    SOUS_THEME_12("Création de navire "),
+    SOUS_THEME_11("Avis d'arrivée navire"),
+    SOUS_THEME_12("Création de navire"),
     SOUS_THEME_13("Déclaration des déchets à une installation portuaire"),
     SOUS_THEME_14("Demande d'Attribution de Poste (DAP)"),
     SOUS_THEME_15("Manifeste Export"),

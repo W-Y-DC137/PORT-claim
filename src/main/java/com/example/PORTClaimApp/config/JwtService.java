@@ -38,6 +38,7 @@ public class JwtService {
        // System.out.println("jhgjh");
         return Jwts
                 .builder()
+                .claim("id",utilisateur)
                 .claim("role",utilisateur.getRole())
                 .setSubject(utilisateur.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))

@@ -1,6 +1,8 @@
 package com.example.PORTClaimApp.Service;
 
 import com.example.PORTClaimApp.DTO.TicketAttachementDTO;
+import com.example.PORTClaimApp.Entity.TicketAttachement;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -10,4 +12,6 @@ public interface TicAttachService {
     List<TicketAttachementDTO> getAllTicAttach();
     TicketAttachementDTO updateTicAttach(Long ticAttachId,TicketAttachementDTO updatedTicAttachDto);
     void deleteTicAttach(Long ticAttachId);
+
+    TicketAttachement saveAttachement(MultipartFile file, Long ticketId);
 }

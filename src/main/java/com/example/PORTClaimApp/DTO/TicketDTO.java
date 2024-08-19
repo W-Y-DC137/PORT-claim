@@ -18,8 +18,8 @@ import java.util.Date;
 public class TicketDTO {
     private Long idTicketDto;
     private TypeTicket typeTicketDto;
-    private ThemeDTO themeDTO;
-    private SousThemeDTO sousThemeDTO;
+    private Long themeId;
+    private Long sousThemeId;
     private NiveauUrgence niveauUrgenceDto;
     private String objetDto;
     private String descriptionDto;
@@ -29,5 +29,5 @@ public class TicketDTO {
     private Date dateFermetureDto;
     private Long idClientDto;
     private Long idAgentDto;
-    private Long idAdminDTO;
+    private Long idAdminDto;
 }

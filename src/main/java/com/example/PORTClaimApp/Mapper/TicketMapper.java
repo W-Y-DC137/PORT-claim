@@ -4,6 +4,9 @@ import com.example.PORTClaimApp.DTO.TicketDTO;
 import com.example.PORTClaimApp.Entity.SousTheme;
 import com.example.PORTClaimApp.Entity.Ticket;
 import com.example.PORTClaimApp.Entity.Utilisateur;
+import com.example.PORTClaimApp.Repository.SousThemeRepo;
+import com.example.PORTClaimApp.Repository.ThemeRepo;
+import com.example.PORTClaimApp.Repository.TicketRepo;
 import com.example.PORTClaimApp.Repository.UtilisateurRepo;
 import com.example.PORTClaimApp.Service.ServiceImpl.UtilisateurServiceImpl;
 import com.example.PORTClaimApp.Service.UtilisateurService;
@@ -17,16 +20,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class TicketMapper {
     @Autowired
-  UtilisateurRepo utilisateurRepo;
+     UtilisateurRepo utilisateurRepo;
+    @Autowired
+    ThemeRepo themeRepo;
+    @Autowired
+    SousThemeRepo sousThemeRepo;
     public static TicketDTO mapToTicketDTO (Ticket ticket){
         if (ticket==null ){
             return null;
         }
+        Long agentId = ticket.getAgent() != null ? ticket.getAgent().getId() : null;
+        Long adminId = ticket.getAdmin() != null ? ticket.getAdmin().getId() : null;
         return new TicketDTO(
                 ticket.getIdTicket(),
                 ticket.getType(),
-                ThemeMapper.mapToThemeDTO(ticket.getTheme()),
-                SousThemeMapper.mapToSousThemeDTO(ticket.getSousTheme()),
+                ticket.getTheme().getIdTheme(),
+                ticket.getSousTheme().getIdSousTheme(),
                 ticket.getNiveauUrgence(),
                 ticket.getObjet(),
                 ticket.getDescription(),
@@ -35,22 +44,23 @@ public class TicketMapper {
                 ticket.getDateResolution(),
                 ticket.getDateFermeture(),
                 ticket.getClient().getId(),
-                ticket.getAgent().getId(),
-                ticket.getAdmin().getId()
+                agentId,
+                adminId
         );
 
     }
 
 
-    public  Ticket mapToTicket (TicketDTO ticketDTO){
-        if(ticketDTO==null){
+    public Ticket mapToTicket(TicketDTO ticketDTO) {
+        if (ticketDTO == null) {
             return null;
         }
+
         Ticket ticket = new Ticket();
         ticket.setIdTicket(ticketDTO.getIdTicketDto());
         ticket.setType(ticketDTO.getTypeTicketDto());
-        ticket.setTheme(ThemeMapper.mapToTheme(ticketDTO.getThemeDTO()));
-        ticket.setSousTheme((SousThemeMapper.mapToSousTheme(ticketDTO.getSousThemeDTO())));
+        ticket.setTheme(themeRepo.findById(ticketDTO.getThemeId()).orElse(null));
+        ticket.setSousTheme(sousThemeRepo.findById(ticketDTO.getSousThemeId()).orElse(null));
         ticket.setNiveauUrgence(ticketDTO.getNiveauUrgenceDto());
         ticket.setObjet(ticketDTO.getObjetDto());
         ticket.setDescription(ticketDTO.getDescriptionDto());
@@ -58,16 +68,23 @@ public class TicketMapper {
         ticket.setDateOuverture(ticketDTO.getDateOuvertureDto());
         ticket.setDateResolution(ticketDTO.getDateResolutionDto());
         ticket.setDateFermeture(ticketDTO.getDateFermetureDto());
-        if(ticketDTO.getIdClientDto()!=null){
+
+        // Set client
+        if (ticketDTO.getIdClientDto() != null) {
             ticket.setClient(utilisateurRepo.findById(ticketDTO.getIdClientDto()).orElse(null));
         }
 
-        if(ticketDTO.getIdAgentDto()!=null){
+        // Set agent only if the ID is not null
+        if (ticketDTO.getIdAgentDto() != null) {
             ticket.setAgent(utilisateurRepo.findById(ticketDTO.getIdAgentDto()).orElse(null));
         }
-        if(ticketDTO.getIdAdminDTO()!=null){
-            ticket.setAdmin(utilisateurRepo.findById(ticketDTO.getIdAdminDTO()).orElse(null));
+
+        // Set admin only if the ID is not null
+        if (ticketDTO.getIdAdminDto() != null) {
+            ticket.setAdmin(utilisateurRepo.findById(ticketDTO.getIdAdminDto()).orElse(null));
         }
+
         return ticket;
     }
+
 }

@@ -4,6 +4,8 @@ import com.example.PORTClaimApp.DTO.TicketDTO;
 import com.example.PORTClaimApp.Entity.Ticket;
 import com.example.PORTClaimApp.Exception.RessourceNotFoundException;
 import com.example.PORTClaimApp.Mapper.*;
+import com.example.PORTClaimApp.Repository.SousThemeRepo;
+import com.example.PORTClaimApp.Repository.ThemeRepo;
 import com.example.PORTClaimApp.Repository.TicketRepo;
 import com.example.PORTClaimApp.Repository.UtilisateurRepo;
 import com.example.PORTClaimApp.Service.TicketService;
@@ -19,6 +21,12 @@ import java.util.stream.Collectors;
 public class TicketServiceImpl implements TicketService {
     @Autowired
     TicketRepo ticketRepo;
+
+    @Autowired
+    ThemeRepo themeRepo;
+
+    @Autowired
+    SousThemeRepo sousThemeRepo;
     @Autowired
     TicketMapper ticketMapper;
     @Autowired
@@ -64,8 +72,8 @@ public class TicketServiceImpl implements TicketService {
                         new RessourceNotFoundException("Nous n'avons trouvé aucun ticket correspondant à l'ID fourni : " + ticketId + ". Veuillez vérifier l'ID et réessayer")
                 );
         ticket.setType(updatedTicketDto.getTypeTicketDto());
-        ticket.setTheme(ThemeMapper.mapToTheme(updatedTicketDto.getThemeDTO()));
-        ticket.setSousTheme(SousThemeMapper.mapToSousTheme(updatedTicketDto.getSousThemeDTO()));
+        ticket.setTheme(themeRepo.findById(updatedTicketDto.getThemeId()).orElse(null));
+        ticket.setSousTheme(sousThemeRepo.findById(updatedTicketDto.getSousThemeId()).orElse(null));
         ticket.setNiveauUrgence(updatedTicketDto.getNiveauUrgenceDto());
         ticket.setObjet(updatedTicketDto.getObjetDto());
         ticket.setDescription(updatedTicketDto.getDescriptionDto());
@@ -75,7 +83,7 @@ public class TicketServiceImpl implements TicketService {
         ticket.setDateFermeture(updatedTicketDto.getDateFermetureDto());
        ticket.setClient(utilisateurRepo.findById(updatedTicketDto.getIdClientDto()).orElse(null));
        ticket.setAgent(utilisateurRepo.findById(updatedTicketDto.getIdAgentDto()).orElse(null));
-       ticket.setAdmin(utilisateurRepo.findById(updatedTicketDto.getIdAdminDTO()).orElse(null));
+       ticket.setAdmin(utilisateurRepo.findById(updatedTicketDto.getIdAdminDto()).orElse(null));
         Ticket updatedTicket = ticketRepo.save(ticket);
         return TicketMapper.mapToTicketDTO(updatedTicket);
     }

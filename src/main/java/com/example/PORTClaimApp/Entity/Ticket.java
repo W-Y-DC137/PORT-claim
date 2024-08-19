@@ -59,7 +59,7 @@ public class Ticket {
 
 
     @ManyToOne
-    @JoinColumn(name = "idClient")
+    @JoinColumn(name = "idClient",nullable = false)
     private Utilisateur client;
     @ManyToOne
     @JoinColumn(name = "idAgent",nullable = true)
