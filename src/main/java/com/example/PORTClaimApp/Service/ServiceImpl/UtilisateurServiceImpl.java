@@ -53,7 +53,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         utilisateur.setNomUtilisateur(utilisateurDTO.getNomUtilisateur());
         utilisateur.setEmail(utilisateurDTO.getEmail());
         utilisateur.setRole(utilisateurDTO.getRole());
-        utilisateur.setMotDePasse(passwordEncoder.encode(utilisateurDTO.getMotDePasse()));
+        //utilisateur.setMotDePasse(passwordEncoder.encode(utilisateurDTO.getMotDePasse()));
         Utilisateur savedUtilisateur = utilisateurRepo.save(utilisateur);
         return UtilisateurMapper.mapToUtilisateurDto(savedUtilisateur);
     }

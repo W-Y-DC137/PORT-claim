@@ -81,9 +81,12 @@ public class TicketServiceImpl implements TicketService {
         ticket.setDateOuverture(updatedTicketDto.getDateOuvertureDto());
         ticket.setDateResolution(updatedTicketDto.getDateResolutionDto());
         ticket.setDateFermeture(updatedTicketDto.getDateFermetureDto());
-       ticket.setClient(utilisateurRepo.findById(updatedTicketDto.getIdClientDto()).orElse(null));
-       ticket.setAgent(utilisateurRepo.findById(updatedTicketDto.getIdAgentDto()).orElse(null));
-       ticket.setAdmin(utilisateurRepo.findById(updatedTicketDto.getIdAdminDto()).orElse(null));
+        if(updatedTicketDto.getIdClientDto()!=null){
+       ticket.setClient(utilisateurRepo.findById(updatedTicketDto.getIdClientDto()).orElse(null));}
+        if(updatedTicketDto.getIdAgentDto()!=null){
+       ticket.setAgent(utilisateurRepo.findById(updatedTicketDto.getIdAgentDto()).orElse(null));}
+        if(updatedTicketDto.getIdAdminDto()!=null){
+        ticket.setAdmin(utilisateurRepo.findById(updatedTicketDto.getIdAdminDto()).orElse(null));}
         Ticket updatedTicket = ticketRepo.save(ticket);
         return TicketMapper.mapToTicketDTO(updatedTicket);
     }

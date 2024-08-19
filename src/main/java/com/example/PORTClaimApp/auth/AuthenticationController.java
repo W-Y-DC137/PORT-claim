@@ -1,8 +1,13 @@
 package com.example.PORTClaimApp.auth;
 
+import com.example.PORTClaimApp.Entity.Utilisateur;
+import com.example.PORTClaimApp.Repository.UtilisateurRepo;
+import com.example.PORTClaimApp.config.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -11,6 +16,10 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 
     private final AuthenticationService service;
+
+    private final JwtService jwtService;
+
+    private final UtilisateurRepo utilisateurRepo;
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
@@ -24,5 +33,27 @@ public class AuthenticationController {
     ){
         return ResponseEntity.ok(service.authenticate(request));
 
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<AuthenticationResponse> refreshToken(
+            @RequestBody Map<String, Long> request
+    ) {
+        Long userId = request.get("id");
+        Utilisateur utilisateur = utilisateurRepo.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
+        String newToken = jwtService.generateToken(utilisateur);
+        return ResponseEntity.ok(new AuthenticationResponse(newToken));
+    }
+
+    @PutMapping("/update-profile")
+    public ResponseEntity<?> updateProfile(@RequestBody Utilisateur updatedUser) {
+        Utilisateur utilisateur = utilisateurRepo.findById(updatedUser.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
+        utilisateur.setNomUtilisateur(updatedUser.getNomUtilisateur());
+        utilisateur.setEmail(updatedUser.getEmail());
+        utilisateurRepo.save(utilisateur);
+
+        // Generate new token
+        String newToken = jwtService.generateToken(utilisateur);
+        return ResponseEntity.ok(new AuthenticationResponse(newToken));
     }
 }
