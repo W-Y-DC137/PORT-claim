@@ -1,6 +1,5 @@
 package com.example.PORTClaimApp.config;
 
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +24,7 @@ public class SecurityConfig {
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/**","/api/utilisateurs/**","/api/tickets/**",
-                        "/api/themes/**","/api/sousThemes/**","/api/ticketAttachements/**")
+                        "/api/themes/**","/api/sousThemes/**","/api/ticketAttachements/**","/api/referentiel/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

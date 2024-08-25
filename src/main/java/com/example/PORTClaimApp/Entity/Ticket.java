@@ -28,11 +28,11 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name = "theme_id")
-    private Theme theme;
+    private Referentiel theme;
 
     @ManyToOne
     @JoinColumn(name = "sousTheme_id")
-    private SousTheme sousTheme;
+    private Referentiel sousTheme;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

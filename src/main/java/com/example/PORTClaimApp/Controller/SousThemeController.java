@@ -12,6 +12,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
+@CrossOrigin("*")
 @RequestMapping("api/sousThemes")
 public class SousThemeController {
     SousThemeService sousThemeService;
