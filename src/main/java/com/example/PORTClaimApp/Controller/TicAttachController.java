@@ -2,8 +2,10 @@ package com.example.PORTClaimApp.Controller;
 
 import com.example.PORTClaimApp.Attachements.TicAttResponseData;
 import com.example.PORTClaimApp.DTO.TicketAttachementDTO;
+import com.example.PORTClaimApp.Entity.Ticket;
 import com.example.PORTClaimApp.Entity.TicketAttachement;
 import com.example.PORTClaimApp.Service.TicAttachService;
+import lombok.AllArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -17,7 +19,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.List;
 
 
+
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/api/ticketAttachements")
 public class TicAttachController {
 
@@ -86,6 +90,14 @@ public class TicAttachController {
     public ResponseEntity<List<TicketAttachementDTO>> getAllTickAttach(){
         List<TicketAttachementDTO> ticketAttachementDTOS = ticAttachService.getAllTicAttach();
         return ResponseEntity.ok(ticketAttachementDTOS);
+    }
+
+    //GetAllAttach by ticket REST API .
+
+    @GetMapping("/ticket/{ticketId}")
+    public ResponseEntity<List<TicketAttachementDTO>> getTicAttByTic(@PathVariable("ticketId") Long ticketId){
+        List<TicketAttachementDTO> attachementDtos = ticAttachService.getAttachByTic(ticketId);
+        return ResponseEntity.ok(attachementDtos);
     }
 
     //Update TicAttach REST APIs.

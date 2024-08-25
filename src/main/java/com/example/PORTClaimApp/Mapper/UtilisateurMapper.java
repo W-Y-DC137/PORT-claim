@@ -13,7 +13,9 @@ public class UtilisateurMapper {
                 utilisateur.getNomUtilisateur(),
                 utilisateur.getEmail(),
                 utilisateur.getRole(),
-                utilisateur.getMotDePasse()
+                utilisateur.getMotDePasse(),
+                utilisateur.getResetToken(),
+                utilisateur.getTokenExpiration()
         );
         return utilisateurDto;
     }
@@ -24,7 +26,9 @@ public class UtilisateurMapper {
                 utilisateurDto.getNomUtilisateur(),
                 utilisateurDto.getEmail(),
                 utilisateurDto.getRole(),
-                utilisateurDto.getMotDePasse()
+                utilisateurDto.getMotDePasse(),
+                utilisateurDto.getResetToken(),
+                utilisateurDto.getTokenExpiration()
         );
         return utilisateur;
     }

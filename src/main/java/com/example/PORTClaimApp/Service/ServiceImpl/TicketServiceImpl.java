@@ -2,12 +2,10 @@ package com.example.PORTClaimApp.Service.ServiceImpl;
 
 import com.example.PORTClaimApp.DTO.TicketDTO;
 import com.example.PORTClaimApp.Entity.Ticket;
+import com.example.PORTClaimApp.Entity.Utilisateur;
 import com.example.PORTClaimApp.Exception.RessourceNotFoundException;
 import com.example.PORTClaimApp.Mapper.*;
-import com.example.PORTClaimApp.Repository.SousThemeRepo;
-import com.example.PORTClaimApp.Repository.ThemeRepo;
-import com.example.PORTClaimApp.Repository.TicketRepo;
-import com.example.PORTClaimApp.Repository.UtilisateurRepo;
+import com.example.PORTClaimApp.Repository.*;
 import com.example.PORTClaimApp.Service.TicketService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +20,8 @@ public class TicketServiceImpl implements TicketService {
     @Autowired
     TicketRepo ticketRepo;
 
-    @Autowired
-    ThemeRepo themeRepo;
-
-    @Autowired
-    SousThemeRepo sousThemeRepo;
+   @Autowired
+    ReferentielRepo referentielRepo;
     @Autowired
     TicketMapper ticketMapper;
     @Autowired
@@ -45,6 +40,20 @@ public class TicketServiceImpl implements TicketService {
                         new RessourceNotFoundException("Nous n'avons trouvé aucun ticket correspondant à l'ID fourni : " + ticketId + ". Veuillez vérifier l'ID et réessayer")
                         );
         return TicketMapper.mapToTicketDTO(ticket);
+    }
+
+    @Override
+    public List<TicketDTO> getTicketsByClientId(Long clientId) {
+        Utilisateur client = utilisateurRepo.findById(clientId).orElseThrow(
+                ()->
+                new RessourceNotFoundException("aucun client est trouvé avec l'id :"+clientId)
+
+                );
+
+        List<Ticket> tickets = ticketRepo.findByClient(client);
+
+        return tickets.stream().map((ticket)->TicketMapper.mapToTicketDTO(ticket))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -72,8 +81,8 @@ public class TicketServiceImpl implements TicketService {
                         new RessourceNotFoundException("Nous n'avons trouvé aucun ticket correspondant à l'ID fourni : " + ticketId + ". Veuillez vérifier l'ID et réessayer")
                 );
         ticket.setType(updatedTicketDto.getTypeTicketDto());
-        ticket.setTheme(themeRepo.findById(updatedTicketDto.getThemeId()).orElse(null));
-        ticket.setSousTheme(sousThemeRepo.findById(updatedTicketDto.getSousThemeId()).orElse(null));
+        ticket.setTheme(referentielRepo.findById(updatedTicketDto.getThemeId()).orElse(null));
+        ticket.setSousTheme(referentielRepo.findById(updatedTicketDto.getSousThemeId()).orElse(null));
         ticket.setNiveauUrgence(updatedTicketDto.getNiveauUrgenceDto());
         ticket.setObjet(updatedTicketDto.getObjetDto());
         ticket.setDescription(updatedTicketDto.getDescriptionDto());

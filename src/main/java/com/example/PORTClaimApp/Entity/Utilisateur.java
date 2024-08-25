@@ -7,9 +7,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
-
 
 @Entity
 @Getter
@@ -26,6 +26,10 @@ public class Utilisateur implements UserDetails {
     @Enumerated(EnumType.STRING)
     private RoleUtilisateur role;
     private String motDePasse;
+
+    // New fields for password reset
+    private String resetToken;
+    private LocalDateTime tokenExpiration;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -2,7 +2,7 @@ package com.example.PORTClaimApp.Enums;
 
 public enum SousThemeListe {
     //theme : Achat de forfaits, facturation et paiements des factures PORTNET SA
-    SOUS_THEME_1("Achat de forfaits."),
+    SOUS_THEME_1("Achat de forfaits"),
     SOUS_THEME_2("Facturation"),
     SOUS_THEME_3("Paiement en ligne multicanal des factures PORTNET"),
 
@@ -11,7 +11,7 @@ public enum SousThemeListe {
     SOUS_THEME_5("Mainlevée"),
     SOUS_THEME_6("Manifeste MEAD"),
     SOUS_THEME_7("Notification automatique, à l'import, de l'avis d'arrivée des marchandises au port"),
-    SOUS_THEME_8("Prise de Rendez-vous "),
+    SOUS_THEME_8("Prise de Rendez-vous"),
     SOUS_THEME_9("Programmation des visites Fiches suiveuses"),
     SOUS_THEME_10("Résultats du contrôle"),
 

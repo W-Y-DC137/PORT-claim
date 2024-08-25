@@ -55,6 +55,18 @@ public class TicAttachServiceImpl implements TicAttachService {
     }
 
     @Override
+    public List<TicketAttachementDTO> getAttachByTic(Long ticketId) {
+        Ticket ticket = ticketRepo.findById(ticketId).orElseThrow(()->
+                new RessourceNotFoundException("aucun ticket est trouvé avec l'id "+ticketId)
+                );
+
+        List<TicketAttachement> ticketAttachements = ticketAttachementRepo.findByTicket(ticket);
+
+        return ticketAttachements.stream().map((attachement)->TicAttachMapper.mapToTicAttachDTO(attachement))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public TicketAttachementDTO updateTicAttach(Long ticAttachId, TicketAttachementDTO updatedTicAttachDto) {
         TicketAttachement ticketAttachement= ticketAttachementRepo.findById(ticAttachId)
                 .orElseThrow(()->

@@ -11,6 +11,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
+@CrossOrigin("*")
 @RequestMapping("api/themes")
 public class ThemeController {
     ThemeService themeService;

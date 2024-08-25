@@ -4,10 +4,7 @@ import com.example.PORTClaimApp.DTO.TicketDTO;
 import com.example.PORTClaimApp.Entity.SousTheme;
 import com.example.PORTClaimApp.Entity.Ticket;
 import com.example.PORTClaimApp.Entity.Utilisateur;
-import com.example.PORTClaimApp.Repository.SousThemeRepo;
-import com.example.PORTClaimApp.Repository.ThemeRepo;
-import com.example.PORTClaimApp.Repository.TicketRepo;
-import com.example.PORTClaimApp.Repository.UtilisateurRepo;
+import com.example.PORTClaimApp.Repository.*;
 import com.example.PORTClaimApp.Service.ServiceImpl.UtilisateurServiceImpl;
 import com.example.PORTClaimApp.Service.UtilisateurService;
 import lombok.AllArgsConstructor;
@@ -22,10 +19,8 @@ public class TicketMapper {
     @Autowired
      UtilisateurRepo utilisateurRepo;
     @Autowired
-    ThemeRepo themeRepo;
-    @Autowired
-    SousThemeRepo sousThemeRepo;
-    public static TicketDTO mapToTicketDTO (Ticket ticket){
+    ReferentielRepo referentielRepo;
+        public static TicketDTO mapToTicketDTO (Ticket ticket){
         if (ticket==null ){
             return null;
         }
@@ -34,8 +29,8 @@ public class TicketMapper {
         return new TicketDTO(
                 ticket.getIdTicket(),
                 ticket.getType(),
-                ticket.getTheme().getIdTheme(),
-                ticket.getSousTheme().getIdSousTheme(),
+                ticket.getTheme().getId(),
+                ticket.getSousTheme().getId(),
                 ticket.getNiveauUrgence(),
                 ticket.getObjet(),
                 ticket.getDescription(),
@@ -59,8 +54,8 @@ public class TicketMapper {
         Ticket ticket = new Ticket();
         ticket.setIdTicket(ticketDTO.getIdTicketDto());
         ticket.setType(ticketDTO.getTypeTicketDto());
-        ticket.setTheme(themeRepo.findById(ticketDTO.getThemeId()).orElse(null));
-        ticket.setSousTheme(sousThemeRepo.findById(ticketDTO.getSousThemeId()).orElse(null));
+        ticket.setTheme(referentielRepo.findById(ticketDTO.getThemeId()).orElse(null));
+        ticket.setSousTheme(referentielRepo.findById(ticketDTO.getSousThemeId()).orElse(null));
         ticket.setNiveauUrgence(ticketDTO.getNiveauUrgenceDto());
         ticket.setObjet(ticketDTO.getObjetDto());
         ticket.setDescription(ticketDTO.getDescriptionDto());

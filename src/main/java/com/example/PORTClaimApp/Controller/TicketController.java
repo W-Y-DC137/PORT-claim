@@ -13,6 +13,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/api/tickets")
 public class TicketController {
     TicketService ticketService;
@@ -31,6 +32,14 @@ public class TicketController {
         return ResponseEntity.ok(ticketDto);
     }
 
+    //get Ticket  BY Client REST API
+
+    @GetMapping("client/{clientId}")
+    public ResponseEntity<List<TicketDTO>> getTicketsByClientId(@PathVariable("clientId") Long clientId){
+      List<TicketDTO> ticketDtos  = ticketService.getTicketsByClientId(clientId);
+      return ResponseEntity.ok(ticketDtos);
+    }
+
     //get all Tickets REST API
     @GetMapping
     public ResponseEntity<List <TicketDTO>> getAllTicket(){
@@ -40,8 +49,8 @@ public class TicketController {
 
     //update Ticket REST API
     @PutMapping("{id}")
-    public ResponseEntity<TicketDTO> updateTicket(@PathVariable("id") Long ticketId ,@RequestBody TicketDTO updatedTicket){
-        TicketDTO ticketDto = ticketService.updateTicket(ticketId,updatedTicket);
+    public ResponseEntity<TicketDTO> updateTicket(@PathVariable("id") Long ticketId ,@RequestBody TicketDTO updateTic){
+        TicketDTO ticketDto = ticketService.updateTicket(ticketId,updateTic);
         return ResponseEntity.ok(ticketDto);
     }
 
