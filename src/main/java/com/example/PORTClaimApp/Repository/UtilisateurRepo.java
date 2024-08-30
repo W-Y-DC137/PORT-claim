@@ -13,7 +13,8 @@ Optional<Utilisateur> findByNomUtilisateur (String nomUtilisateur);
 
 List<Utilisateur> findByRoleIn(List<RoleUtilisateur> roles);
 
-    Optional<Utilisateur> findByEmail(String email);
+Optional<Utilisateur> findByEmail(String email);
 
-    Optional<Utilisateur> findByResetToken(String token);
+Optional<Utilisateur> findByResetPasswordToken(String token);
+
 }

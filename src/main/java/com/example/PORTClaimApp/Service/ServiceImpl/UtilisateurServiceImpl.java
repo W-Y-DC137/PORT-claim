@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -82,22 +83,22 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     }
 
-    @Override
+  /*  @Override
     public void createPasswordResetToken(String email) {
         Utilisateur utilisateur = utilisateurRepo.findByEmail(email)
                 .orElseThrow(()->
                                 new RessourceNotFoundException("Nous n'avons trouvé aucun utilisateur correspondant à l'email fourni : " + email + ". Veuillez vérifier l'ID et réessayer")
                         );
-        UtilisateurDTO utilisateurDto = UtilisateurMapper.mapToUtilisateurDto(utilisateur);
+        //UtilisateurDTO utilisateurDto = UtilisateurMapper.mapToUtilisateurDto(utilisateur);
 
         String token = UUID.randomUUID().toString();
-        utilisateurDto.setResetToken(token);
-        utilisateurDto.setTokenExpiration(LocalDateTime.now().plusHours(1));//token ayb9a salh lmodate sa3a
+        utilisateur.setResetToken(token);
+        utilisateur.setTokenExpiration(LocalDateTime.now().plusHours(1));//token ayb9a salh lmodate sa3a
 
-        sendPasswordResetEmail(utilisateurDto.getEmail(),token);
-    }
+        sendPasswordResetEmail(utilisateur.getEmail(),token);
+    }*/
 
-    @Override
+/*    @Override
     public void sendPasswordResetEmail(String email, String token) {
         String url = "http://localhost:3000/reset-password?token=" + token;
         String subject = "demande de rénitialisation de mot de passe";
@@ -109,7 +110,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         message.setText(body);
 
         mailSender.send(message);
-    }
+    }*/
 
     @Override
     public UtilisateurDTO updateUtilisateur(Long id, UtilisateurDTO utilisateurDTO) {
@@ -135,16 +136,48 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
-    public UtilisateurDTO validatePasswordResetToken(String token) {
+    public void updateResetPasswordToken(String token, String email) {
+        Utilisateur utilisateur = utilisateurRepo.findByEmail(email)
+                .orElseThrow(()->
+                                new RessourceNotFoundException("Nous n'avons trouvé aucun utilisateur avec l'email : " + email + ". Veuillez vérifier l'email et réessayer")
+                        );
+        if(utilisateur != null){
+            utilisateur.setResetPasswordToken(token);
+            utilisateurRepo.save(utilisateur);
+        }
+    }
+
+    @Override
+    public Utilisateur getByResetPasswordToken(String token) {
+        return utilisateurRepo.findByResetPasswordToken(token)
+                .orElseThrow(()->
+                        new RessourceNotFoundException("token invalide")
+                        );
+    }
+
+    @Override
+    public void updatePassword(Utilisateur utilisateur, String newPassword) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        utilisateur.setMotDePasse(encodedPassword);
+        utilisateur.setResetPasswordToken(null);
+        utilisateurRepo.save(utilisateur);
+    }
+
+
+
+
+/*    @Override
+    public Utilisateur validatePasswordResetToken(String token) {
         Utilisateur utilisateur = utilisateurRepo.findByResetToken(token)
                 .orElseThrow(()->
                         new RessourceNotFoundException("token non valide")
                         );
-        UtilisateurDTO utilisateurDto = UtilisateurMapper.mapToUtilisateurDto(utilisateur);
+       // UtilisateurDTO utilisateurDto = UtilisateurMapper.mapToUtilisateurDto(utilisateur);
 
-        if(utilisateurDto.getTokenExpiration().isBefore(LocalDateTime.now())){
+        if(utilisateur.getTokenExpiration().isBefore(LocalDateTime.now())){
             throw new RuntimeException("Token expiré");
         }
-        return utilisateurDto;
-    }
+        return utilisateur;
+    }*/
 }

@@ -14,11 +14,21 @@ public interface UtilisateurService {
     UtilisateurDTO getUtilisateur(Long id);
     List<UtilisateurDTO> getAllUtilisateurs();
     List<UtilisateurDTO> getUtilisateursByRole(List<RoleUtilisateur> roles);
+
     void changePassword(Long userId , ChangePasswordDTO changePasswordDTO);
-    void createPasswordResetToken(String email);
-    void sendPasswordResetEmail(String email, String token);
+   /* void createPasswordResetToken(String email);
+    void sendPasswordResetEmail(String email, String token);*/
     UtilisateurDTO updateUtilisateur(Long id ,UtilisateurDTO utilisateurDTO);
     void deleteUtilisateur(Long id);
 
- UtilisateurDTO validatePasswordResetToken(String token);
+    public void updateResetPasswordToken(String token , String email);
+
+    public Utilisateur getByResetPasswordToken(String token);
+
+    public void updatePassword(Utilisateur utilisateur,String newPassword);
+
+
+ /*Utilisateur validatePasswordResetToken(String token);*/
+
+
 }
