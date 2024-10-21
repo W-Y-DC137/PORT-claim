@@ -24,6 +24,8 @@ public class TicketDTO {
     private String objetDto;
     private String descriptionDto;
     private StatutTicket statusDto;
+
+    private Date dateDernierStatut;
     private Date dateOuvertureDto;
     private Date dateResolutionDto;
     private Date dateFermetureDto;

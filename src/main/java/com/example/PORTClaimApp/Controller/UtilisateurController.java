@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -88,7 +89,9 @@ public class UtilisateurController {
 
         try {
             utilisateurService.updateResetPasswordToken(token, email);
-            String resetPasswordLink = Utility.getSiteURL(request) + "/reset_password?token=" + token;
+            /*String resetPasswordLink = Utility.getSiteURL(request) + "/reset_password?token=" + token;*/
+            String resetPasswordLink = "http://localhost:3000/reset_password?token=" + token; // Point to frontend URL
+
             sendEmail(email, resetPasswordLink);
             return ResponseEntity.ok("A password reset link has been sent to your email: " + email);
         } catch (Exception e) {
@@ -106,26 +109,26 @@ public class UtilisateurController {
 
             helper.setFrom("no-reply@portnet.ma", "Portnet HelpDesk");
             helper.setTo(recipientEmail);
-            helper.setSubject("Here's the link to reset your password");
+            helper.setSubject("Voilà le lien pour modifier votre mot de passe");
 
-            String content = "<p>Hello,</p>"
-                    + "<p>You have requested to reset your password.</p>"
-                    + "<p>Click the link below to change your password:</p>"
-                    + "<p><a href=\"" + link + "\">Change my password</a></p>"
+            String content = "<p>Bonjour,</p>"
+                    + "<p>Vous avez demandé à réinitialiser votre mot de passe.</p>"
+                    + "<p>Cliquez sur le lien ci-dessous pour changer votre mot de passe :</p>"
+                    + "<p><a href=\"" + link + "\">Changer mon mot de passe</a></p>"
                     + "<br>"
-                    + "<p>Ignore this email if you do remember your password, "
-                    + "or you have not made the request.</p>";
+                    + "<p>Ignorez cet e-mail si vous vous souvenez de votre mot de passe "
+                    + "ou si vous n'avez pas fait cette demande.</p>";
 
             helper.setText(content, true);
 
             mailSender.send(message);
         } catch (MessagingException | UnsupportedEncodingException e) {
             e.printStackTrace(); // Log or handle the exception
-            throw new RuntimeException("Failed to send email", e);
+            throw new RuntimeException("Échec de l'envoi de l'e-mail\n", e);
         }
     }
 
-    @GetMapping("/reset_password")
+   /* @GetMapping("/reset_password")
     public String showResetPasswordForm(@Param(value="token") String token , Model model){
         Utilisateur utilisateur = utilisateurService.getByResetPasswordToken(token);
         model.addAttribute("token",token);
@@ -136,7 +139,7 @@ public class UtilisateurController {
         }
         return "reset_password_form";
     }
-
+*/
     /*@PostMapping("/reset_password")
     public String processResetPassword(HttpServletRequest request , Model model){
         String token = request.getParameter("token");
@@ -154,20 +157,23 @@ public class UtilisateurController {
         }
         return "message";
     }*/
-    @PostMapping("/reset_password")
-    public ResponseEntity<String> processResetPassword(@RequestParam String token, @RequestParam String password) {
-        try {
-            Utilisateur utilisateur = utilisateurService.getByResetPasswordToken(token);
-            if (utilisateur == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token.");
-            } else {
-                utilisateurService.updatePassword(utilisateur, password);
-                return ResponseEntity.ok("Your password has been successfully reset.");
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("An error occurred.");
-        }
-    }
+   @PostMapping("/reset_password")
+   public ResponseEntity<String> processResetPassword(@RequestParam String token, @RequestBody Map<String, String> requestBody) {
+       try {
+           String password = requestBody.get("password");  // Get password from the body
+           Utilisateur utilisateur = utilisateurService.getByResetPasswordToken(token);
+           if (utilisateur == null) {
+               return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token.");
+           } else {
+               utilisateurService.updatePassword(utilisateur, password);
+               return ResponseEntity.ok("Votre mot de passe a été réinitialisé avec succès.\n");
+           }
+       } catch (Exception e) {
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Une erreur s'est produite.\n");
+       }
+   }
+
+
 
     // Update password REST API
     @PutMapping("/{id}/changer-mot-de-passe")

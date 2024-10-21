@@ -3,6 +3,8 @@ package com.example.PORTClaimApp.Entity;
 import com.example.PORTClaimApp.Enums.NiveauUrgence;
 import com.example.PORTClaimApp.Enums.StatutTicket;
 import com.example.PORTClaimApp.Enums.TypeTicket;
+import com.example.PORTClaimApp.config.CustomEnumDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,11 +36,10 @@ public class Ticket {
     @JoinColumn(name = "sousTheme_id")
     private Referentiel sousTheme;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @JsonDeserialize(using = CustomEnumDeserializer.class)
     private NiveauUrgence niveauUrgence;
 
-    @Column(nullable = false)
     private String objet;
 
     @Column(nullable = false,length = 1000)
@@ -47,6 +48,9 @@ public class Ticket {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private StatutTicket statutTicket;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateDernierStatut;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateOuverture;

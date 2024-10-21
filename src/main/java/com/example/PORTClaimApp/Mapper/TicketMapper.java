@@ -35,6 +35,7 @@ public class TicketMapper {
                 ticket.getObjet(),
                 ticket.getDescription(),
                 ticket.getStatutTicket(),
+                ticket.getDateDernierStatut(),
                 ticket.getDateOuverture(),
                 ticket.getDateResolution(),
                 ticket.getDateFermeture(),
@@ -60,6 +61,7 @@ public class TicketMapper {
         ticket.setObjet(ticketDTO.getObjetDto());
         ticket.setDescription(ticketDTO.getDescriptionDto());
         ticket.setStatutTicket(ticketDTO.getStatusDto());
+        ticket.setDateDernierStatut(ticketDTO.getDateDernierStatut());
         ticket.setDateOuverture(ticketDTO.getDateOuvertureDto());
         ticket.setDateResolution(ticketDTO.getDateResolutionDto());
         ticket.setDateFermeture(ticketDTO.getDateFermetureDto());

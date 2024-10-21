@@ -42,7 +42,11 @@ public class AuthenticationController {
         Long userId = request.get("id");
         Utilisateur utilisateur = utilisateurRepo.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
         String newToken = jwtService.generateToken(utilisateur);
-        return ResponseEntity.ok(new AuthenticationResponse(newToken));
+        String firebaseToken = service.generateFirebaseToken(utilisateur);
+        return ResponseEntity.ok(AuthenticationResponse.builder()
+                .token(newToken)           // JWT token
+                .firebaseToken(firebaseToken)  // Firebase token
+                .build());
     }
 
     @PutMapping("/update-profile")
@@ -54,6 +58,11 @@ public class AuthenticationController {
 
         // Generate new token
         String newToken = jwtService.generateToken(utilisateur);
-        return ResponseEntity.ok(new AuthenticationResponse(newToken));
+        // Generate new Firebase custom token
+        String firebaseToken = service.generateFirebaseToken(utilisateur);
+        return ResponseEntity.ok(AuthenticationResponse.builder()
+                .token(newToken)              // JWT token
+                .firebaseToken(firebaseToken) // Firebase token
+                .build());
     }
 }
